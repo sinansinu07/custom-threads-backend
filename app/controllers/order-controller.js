@@ -43,6 +43,7 @@ orderCltr.cancelOrder = async (req, res) => {
         const canceledOrder = await Order.findByIdAndUpdate(orderId, body)
         // console.log(canceledOrder)
         res.json(canceledOrder)
+        // await Order.findByIdAndDelete(orderId)
     } catch(err) {
         res.status(500).json('Internal Server Error')
     }
@@ -62,7 +63,7 @@ orderCltr.listOrders = async (req, res) => {
 
 orderCltr.getMyOrders = async (req, res) => {
     try {
-        const orders = await Order.find({customer : req.user.id}).sort({ createdAt : -1 })
+        const orders = await Order.find({customer : req.user.id, status : "Placed"}).sort({ createdAt : -1 })
         .populate({path : 'lineItems.design',populate : { path  : 'product', select : 'name'}, select : ['product','designName', 'color', 'size','frontImage']})
                 .populate('customer', ['username','email'])
         console.log(orders)

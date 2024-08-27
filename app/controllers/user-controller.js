@@ -76,7 +76,7 @@ userCtrl.verifyLink = async(req,res)=>{
         from: process.env.EMAIL,
         to: user.email,
         subject: 'Verify Your Email',
-        text: `Click the following link to verify your email: http://localhost:5000/verify/${verifyToken}`
+        text: `Click the following link to verify your email: ${process.env.RENDER}/verify/${verifyToken}`
     }
     user.verificationToken=verifyToken;
     transporter.sendMail(mailOptions, (error, info) => {
@@ -98,7 +98,7 @@ userCtrl.verifyEmail = async(req,res)=>{
         if(!user){
             return res.status(404).json('Email already verified')
         }
-        res.redirect('http://localhost:3000/customer-profile')
+        res.redirect(`${process.env.RENDER}/customer-profile`)
     }catch(err){
         res.status(500).json({error:'internal server error'})
     }

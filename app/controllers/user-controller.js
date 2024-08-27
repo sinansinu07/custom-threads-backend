@@ -6,6 +6,8 @@ const {validationResult} = require('express-validator')
 const bcrypt = require('bcryptjs')
 const twilio = require('twilio')
 const userCtrl={}
+const render = process.env.RENDER
+const localhost = process.env.LOCALHOST
 
 userCtrl.register = async(req,res)=>{
     const errors = validationResult(req)
@@ -76,7 +78,7 @@ userCtrl.verifyLink = async(req,res)=>{
         from: process.env.EMAIL,
         to: user.email,
         subject: 'Verify Your Email',
-        text: `Click the following link to verify your email: ${process.env.RENDER}/verify/${verifyToken}`
+        text: `Click the following link to verify your email: ${render}/verify/${verifyToken}`
     }
     user.verificationToken=verifyToken;
     transporter.sendMail(mailOptions, (error, info) => {
@@ -98,7 +100,7 @@ userCtrl.verifyEmail = async(req,res)=>{
         if(!user){
             return res.status(404).json('Email already verified')
         }
-        res.redirect(`${process.env.RENDER}/customer-profile`)
+        res.redirect(`${render}/customer-profile`)
     }catch(err){
         res.status(500).json({error:'internal server error'})
     }
